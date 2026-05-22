@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "../components/Navbar";
+import AuditForm from "../components/AuditForm";
 
 export default function Home() {
   return (
@@ -27,6 +28,10 @@ export default function Home() {
         </button>
 
       </section>
+
+        <section className="px-6 pb-32">
+          <AuditForm />
+        </section>
 
     </main>
   );
