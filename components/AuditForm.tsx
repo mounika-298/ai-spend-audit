@@ -447,6 +447,37 @@ const auditBreakdowns = toolsList.map((item) => {
 
           {/* Bottom Lead Registration capture block wrapper line layout */}
           <div className="pt-4 border-t border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+            {totalMonthlySavings > 500 && (
+              <div className="bg-emerald-950/30 border border-emerald-700 rounded-xl p-6">
+                <h4 className="text-lg font-bold text-emerald-400">
+                  High Savings Opportunity Detected
+                </h4>
+
+                <p className="text-sm text-zinc-300 mt-2">
+                  Your audit shows more than $500/month in potential savings. Credex can help capture more of this through discounted AI infrastructure credits.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => alert("Consultation request captured. Credex will reach out after review.")}
+                  className="mt-4 bg-white text-black font-bold px-5 py-3 rounded-xl text-sm border border-emerald-400 shadow-lg hover:bg-emerald-100"
+                >
+                  Book Credex Consultation
+                </button>
+              </div>
+           )}
+
+           {totalMonthlySavings < 100 && (
+              <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-6">
+                <h4 className="text-lg font-bold text-white">
+                  You’re spending well
+                </h4>
+
+                <p className="text-sm text-zinc-400 mt-2">
+                  Your current AI spend looks reasonably optimized. Leave your email and we’ll notify you when new optimizations apply to your stack.
+                </p>
+              </div>
+    )}
             <div>
               <h4 className="font-bold text-white text-base">Save Your Audit Report</h4>
               <p className="text-xs text-zinc-400 mt-1">Get your personalized AI spend audit report delivered securely.</p>
