@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 export type AITool =
 
@@ -45,6 +46,9 @@ export default function AuditForm() {
   
   // Day 3 state trigger check variable
   const [showReport, setShowReport] = useState<boolean>(false);
+  const [email, setEmail] = useState("");
+  const [aiSummary, setAiSummary] = useState("");
+  const [loadingSummary, setLoadingSummary] = useState(false);
 
   // Load configuration inputs parameters snapshot ledger profile from localStorage
   useEffect(() => {
@@ -96,48 +100,135 @@ export default function AuditForm() {
   };
 
   const removeToolFromStack = (id: string) => {
-    setToolsList(toolsList.filter((item) => item.id !== id));
-    setShowReport(false);
-  };
+  setToolsList(toolsList.filter((item) => item.id !== id));
+  setShowReport(false);
+};
+const generateAISummary = async () => {
 
-  // Pricing calculations logic configurations execution parameters mapping
-  const totalCurrentSpend = toolsList.reduce((acc, curr) => acc + curr.monthlySpend, 0);
-  
-  let totalMonthlySavings = 0;
-  const auditBreakdowns = toolsList.map((item) => {
-    let potentialSavings = 0;
-    let recommendation = "Your current cost configurations match standard optimized vectors.";
+  setLoadingSummary(true);
 
-    if ((item.plan === "Team" || item.plan === "Business") && item.seats <= 2) {
-      potentialSavings = item.monthlySpend * 0.30; 
-      recommendation = `Your team is small for a Team plan. Switching to individual Pro plans could reduce unnecessary seat costs.`;
-    } else if (primaryUseCase === "coding" && (item.toolName === "ChatGPT" || item.toolName === "Claude") && item.plan !== "API direct") {
-      potentialSavings = item.monthlySpend * 0.45;
-      recommendation = `Your workflow is coding-heavy. API-based usage may reduce costs compared to premium chat subscriptions.`;
-    } else {
+  try {
 
-  if (item.monthlySpend < 25) {
+    const response = await fetch("/api/summary", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tools: toolsList,
+        savings: Math.floor(totalMonthlySavings),
+        useCase: primaryUseCase,
+      }),
+    });
 
-    potentialSavings = 0;
+    const data = await response.json();
 
-    recommendation =
-      "Your current setup already looks cost-efficient for your usage.";
+    setAiSummary(data.summary);
 
-  } else {
+  } catch (error) {
 
-    potentialSavings = item.monthlySpend * 0.15;
+    console.error(error);
 
-    recommendation =
-      "You may reduce costs by using discounted AI credits or lower-tier plans.";
+    setAiSummary(
+      "AI summary generation temporarily unavailable. Your audit results are still valid."
+    );
 
   }
 
-}
+  setLoadingSummary(false);
+};
+const saveAuditReport = async () => {
 
-    totalMonthlySavings += potentialSavings;
+  if (!email) {
+    alert("Please enter your email");
+    return;
+  }
 
-    return { ...item, savings: Math.floor(potentialSavings), recommendation };
-  });
+  const { error } = await supabase
+    .from("audit_leads")
+    .insert([
+      {
+        email: email,
+        team_size: teamSize,
+        use_case: primaryUseCase,
+        tools: toolsList,
+        monthly_savings: Math.floor(totalMonthlySavings),
+      },
+    ]);
+
+  if (error) {
+    console.log("SUPABASE ERROR:", error);
+    alert(JSON.stringify(error));
+  } else {
+    alert("Your audit report has been saved successfully!");
+    setEmail("");
+  }
+};
+
+// Pricing calculations logic
+const totalCurrentSpend = toolsList.reduce(
+  (acc, curr) => acc + curr.monthlySpend,
+  0
+);
+
+let totalMonthlySavings = 0;
+
+const auditBreakdowns = toolsList.map((item) => {
+
+  let potentialSavings = 0;
+
+  let recommendation =
+    "Your current setup already appears reasonably optimized.";
+
+  if (
+    (item.plan === "Team" || item.plan === "Business") &&
+    item.seats <= 2
+  ) {
+
+    potentialSavings = item.monthlySpend * 0.3;
+
+    recommendation =
+      "Your team is small for a Team plan. Switching to individual Pro plans could reduce unnecessary seat costs.";
+
+  } else if (
+    primaryUseCase === "coding" &&
+    (item.toolName === "ChatGPT" ||
+      item.toolName === "Claude") &&
+    item.plan !== "API direct"
+  ) {
+
+    potentialSavings = item.monthlySpend * 0.45;
+
+    recommendation =
+      "Your workflow is coding-heavy. API-based usage may reduce costs compared to premium chat subscriptions.";
+
+  } else {
+
+    if (item.monthlySpend < 25) {
+
+      potentialSavings = 0;
+
+      recommendation =
+        "Your current setup already looks cost-efficient for your usage.";
+
+    } else {
+
+      potentialSavings = item.monthlySpend * 0.15;
+
+      recommendation =
+        "You may reduce costs by using discounted AI credits or lower-tier plans.";
+
+    }
+  }
+
+  totalMonthlySavings += potentialSavings;
+
+  return {
+    ...item,
+    savings: Math.floor(potentialSavings),
+    recommendation,
+  };
+});
 
   const totalAnnualSavings = Math.floor(totalMonthlySavings * 12);
   const remainingCalculatedSpend = Math.max(0, totalCurrentSpend - totalMonthlySavings);
@@ -265,10 +356,13 @@ export default function AuditForm() {
           <div className="pt-4 text-center border-t border-zinc-900">
             <button
               type="button"
-              onClick={() => setShowReport(true)}
+              onClick={() => {
+                setShowReport(true);
+                generateAISummary();
+             }}
               className="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-8 py-3.5 rounded-xl text-sm transition shadow-lg w-full md:w-auto"
             >
-              Generate Audit Performance Report 🚀
+              Generate Audit Performance Report 
             </button>
           </div>
         </div>
@@ -323,6 +417,21 @@ export default function AuditForm() {
           {/* Granular Strategy Analysis breakdown advisory lists rows */}
           <div className="space-y-4">
             <h4 className="text-sm font-bold text-zinc-300 uppercase tracking-wider">Per-Vendor Granular Strategy Analysis</h4>
+            <div className="bg-black/30 border border-zinc-800 rounded-xl p-6 space-y-4">
+            <h4 className="text-sm font-bold text-zinc-300 uppercase tracking-wider">
+    AI-Generated Personalized Summary
+            </h4>
+
+            {loadingSummary ? (
+              <p className="text-sm text-zinc-400">
+                Generating AI insights...
+              </p>
+            ) : (
+              <p className="text-sm text-zinc-300 leading-relaxed">
+                {aiSummary}
+              </p>
+           )}
+           </div>
             <div className="space-y-3">
               {auditBreakdowns.map((tool) => (
                 <div key={tool.id} className="bg-zinc-950/60 border border-zinc-800 p-5 rounded-xl space-y-2">
@@ -343,8 +452,14 @@ export default function AuditForm() {
               <p className="text-xs text-zinc-400 mt-1">Get your personalized AI spend audit report delivered securely.</p>
             </div>
             <div className="flex gap-2">
-              <input type="email" placeholder="Enter your email" className="bg-black border border-zinc-700 text-xs rounded-xl px-4 py-2 text-white flex-1 focus:outline-none" />
-              <button onClick={() => alert("Your audit report has been saved successfully!")} className="bg-white text-black font-bold text-xs px-4 py-2 rounded-xl">Email My Audit</button>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-black border border-zinc-700 text-xs rounded-xl px-4 py-2 text-white flex-1 focus:outline-none"
+/>
+              <button onClick={saveAuditReport} className="bg-white text-black font-bold text-xs px-4 py-2 rounded-xl">Email My Audit</button>
             </div>
           </div>
 
