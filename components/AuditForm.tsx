@@ -479,6 +479,37 @@ const auditBreakdowns = toolsList.map((item) => {
               </div>
     )}
             <div>
+              <div className="bg-black/30 border border-zinc-800 rounded-xl p-5 space-y-3 mb-4">
+                <h4 className="text-sm font-bold text-zinc-300 uppercase tracking-wider">
+                  Share This Audit
+                </h4>
+
+                <p className="text-xs text-zinc-400">
+                  Copy this public URL to share your audit report. Private details like email are not shown.
+                </p>
+
+                <div className="flex gap-2">
+                  <input
+                    value={`${window.location.origin}/audit/demo-report`}
+                    readOnly
+                    className="bg-black border border-zinc-700 text-xs rounded-xl px-4 py-2 text-white flex-1"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `${window.location.origin}/audit/demo-report`
+                      );
+                      alert("Share URL copied!");
+                    }}
+                    className="bg-white text-black font-bold text-xs px-4 py-2 rounded-xl"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+              
               <h4 className="font-bold text-white text-base">Save Your Audit Report</h4>
               <p className="text-xs text-zinc-400 mt-1">Get your personalized AI spend audit report delivered securely.</p>
             </div>
