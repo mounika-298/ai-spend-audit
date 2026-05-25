@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -49,8 +50,10 @@ export default function AuditForm() {
   const [email, setEmail] = useState("");
   const [aiSummary, setAiSummary] = useState("");
   const [loadingSummary, setLoadingSummary] = useState(false);
-
+  /* eslint-disable react-hooks/set-state-in-effect */
+  "use client";
   // Load configuration inputs parameters snapshot ledger profile from localStorage
+  
   useEffect(() => {
     const savedTools = localStorage.getItem("credex_audit_tools");
     const savedTeamSize = localStorage.getItem("credex_audit_teamsize");
@@ -171,10 +174,7 @@ const totalCurrentSpend = toolsList.reduce(
   0
 );
 
-let totalMonthlySavings = 0;
-
 const auditBreakdowns = toolsList.map((item) => {
-
   let potentialSavings = 0;
 
   let recommendation =
@@ -184,44 +184,30 @@ const auditBreakdowns = toolsList.map((item) => {
     (item.plan === "Team" || item.plan === "Business") &&
     item.seats <= 2
   ) {
-
     potentialSavings = item.monthlySpend * 0.3;
 
     recommendation =
       "Your team is small for a Team plan. Switching to individual Pro plans could reduce unnecessary seat costs.";
-
   } else if (
     primaryUseCase === "coding" &&
-    (item.toolName === "ChatGPT" ||
-      item.toolName === "Claude") &&
+    (item.toolName === "ChatGPT" || item.toolName === "Claude") &&
     item.plan !== "API direct"
   ) {
-
     potentialSavings = item.monthlySpend * 0.45;
 
     recommendation =
       "Your workflow is coding-heavy. API-based usage may reduce costs compared to premium chat subscriptions.";
+  } else if (item.monthlySpend < 25) {
+    potentialSavings = 0;
 
+    recommendation =
+      "Your current setup already looks cost-efficient for your usage.";
   } else {
+    potentialSavings = item.monthlySpend * 0.15;
 
-    if (item.monthlySpend < 25) {
-
-      potentialSavings = 0;
-
-      recommendation =
-        "Your current setup already looks cost-efficient for your usage.";
-
-    } else {
-
-      potentialSavings = item.monthlySpend * 0.15;
-
-      recommendation =
-        "You may reduce costs by using discounted AI credits or lower-tier plans.";
-
-    }
+    recommendation =
+      "You may reduce costs by using discounted AI credits or lower-tier plans.";
   }
-
-  totalMonthlySavings += potentialSavings;
 
   return {
     ...item,
@@ -229,6 +215,11 @@ const auditBreakdowns = toolsList.map((item) => {
     recommendation,
   };
 });
+
+const totalMonthlySavings = auditBreakdowns.reduce(
+  (total, item) => total + item.savings,
+  0
+);
 
   const totalAnnualSavings = Math.floor(totalMonthlySavings * 12);
   const remainingCalculatedSpend = Math.max(0, totalCurrentSpend - totalMonthlySavings);
@@ -509,7 +500,7 @@ const auditBreakdowns = toolsList.map((item) => {
                   </button>
                 </div>
               </div>
-              
+
               <h4 className="font-bold text-white text-base">Save Your Audit Report</h4>
               <p className="text-xs text-zinc-400 mt-1">Get your personalized AI spend audit report delivered securely.</p>
             </div>
