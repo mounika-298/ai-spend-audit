@@ -45,6 +45,7 @@ The surprising insight was that users do not stay loyal to one AI tool. They con
 # What Changed In My Design
 This conversation helped me improve the multi-tool audit approach instead of focusing only on one AI provider. It reinforced the importance of comparing spending across an entire AI stack.
 
+ Note :and i dont know any software employees to ask thats y i ask my college friends i spoke with my friends in call to interview them .thankyou
 
 
 
