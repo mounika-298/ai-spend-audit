@@ -47,3 +47,81 @@ Faced issues with OpenAI API key configuration and route setup. Initially create
 
 **Plan for tomorrow:**  
 Complete remaining documentation files, add automated tests, configure GitHub Actions CI workflow, and finalize pricing references for all audit calculations.
+## Day 4 — 2026-05-24
+**Hours worked: 4
+
+*What I did:
+Worked on improving the audit results experience and deployment flow. Added the AI-generated summary feature with fallback handling when the API fails. Improved the report layout by adding savings breakdown sections, high-savings CTA blocks, and a more honest low-savings state for users already spending efficiently. Integrated Supabase lead capture and tested database insertion from the deployed app. Also started working on shareable audit URLs and deployment fixes on Vercel.
+
+**What I learned: 
+I learned how frontend state, deployment environments, and backend integrations can behave differently between localhost and production. I also understood the importance of graceful fallbacks when AI APIs fail.
+
+**Blockers / what I'm stuck on:  
+Had issues with Vercel deployment routes and debugging public audit URLs. Some state persistence logic also caused unexpected rendering behavior.
+
+**Plan for tomorrow:  
+Finish public shareable audit URLs, add automated tests, configure GitHub Actions CI, and complete remaining documentation files.
+# Day 5 — 2026-05-25
+**Hours worked:** 7
+
+**What I did:  
+Completed automated testing for the audit engine using Vitest and added GitHub Actions CI workflow for lint and test checks. Fixed multiple linting and rendering issues inside the AuditForm component. Improved the public audit sharing section with copy-link functionality and tested deployment behavior across browsers. Also completed Lighthouse verification, user interviews, and several required markdown documentation files including TESTS.md and USER_INTERVIEWS.md.
+
+**What I learned: 
+I learned how CI/CD pipelines work with GitHub Actions and how small lint issues can fail deployment workflows. I also improved my debugging process while fixing React state and effect-related problems.
+
+**Blockers / what I'm stuck on:  
+Spent significant time debugging ESLint hook warnings and understanding why GitHub Actions showed failed checks even after local fixes.
+
+**Plan for tomorrow: 
+Complete remaining documentation polish including pricing data, GTM, economics, metrics, and final README cleanup before submission. and submission also 
+# Day 6
+
+## Work Completed
+
+Today I completed the final submission work for the AI Spend Audit project.
+
+I improved the README.md file by adding:
+- project overview
+- screenshots
+- quick start steps
+- deployment link
+- decisions and trade-offs section
+
+I also added multiple screenshots of:
+- landing page
+- spend calculation section
+- generated audit report
+- shareable URL section
+- Lighthouse performance report
+
+I integrated email delivery functionality using EmailJS so users can receive their audit reports through email. Initially I tested Resend, but later switched to EmailJS because it supports sending emails to different users more easily for project demos and internship evaluation.
+
+I tested:
+- GitHub Actions CI workflow
+- lint checks
+- deployment flow
+- email sending flow
+- responsive design
+- Vercel deployment
+
+I also finalized:
+- user interview documentation
+- development logs
+- README structure
+- deployment verification
+
+## Challenges Faced
+
+I faced issues with:
+- GitHub Actions lint errors
+- React hook warnings
+- email delivery setup
+- screenshot management in README
+- deployment failures on Vercel
+
+I resolved them by debugging step-by-step and testing continuously.
+
+## Final Status
+
+The project is now ready for final submission and deployment review.
