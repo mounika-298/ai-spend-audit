@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
-
+import emailjs from "@emailjs/browser";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -163,8 +163,22 @@ const saveAuditReport = async () => {
     console.log("SUPABASE ERROR:", error);
     alert(JSON.stringify(error));
   } else {
-    alert("Your audit report has been saved successfully!");
-    setEmail("");
+   await emailjs.send(
+  "service_pptw06d",
+  "template_8fyj3wv",
+  {
+    to_email: email,
+    monthly_savings: Math.floor(totalMonthlySavings),
+    annual_savings: totalAnnualSavings,
+  },
+  "81IPxDaho_cB62mAd"
+);
+
+alert("Your audit report has been saved and emailed successfully!");
+setEmail("");
+
+alert("Your audit report has been saved and emailed successfully!");
+setEmail("");
   }
 };
 
