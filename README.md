@@ -1,8 +1,22 @@
 # AI Spend Audit
 AI Spend Audit is a free web application that helps developers, students, startups, and engineering teams understand whether they are overspending on AI tools like ChatGPT, Claude, Cursor, Gemini, GitHub Copilot, and others. Users can enter their current subscriptions, monthly spending, and usage type to instantly receive an audit report with savings recommendations and estimated monthly + annual savings.
-
 The project was built as part of the Credex Web Development Internship assignment. My focus was building a realistic product instead of a simple coding assignment, including deployment, testing, AI integration, audit logic, public shareable URLs, and lead capture functionality.
+## Features
 
+- Multi-tool AI subscription audit system
+- Support for ChatGPT, Claude, Cursor, Gemini, GitHub Copilot, Windsurf, and API-based plans
+- Monthly and annual savings estimation
+- Personalized AI-generated audit summaries
+- Team-plan overspending detection
+- API vs subscription optimization recommendations
+- Public shareable audit URLs
+- Email delivery for audit reports
+- Responsive mobile-friendly UI
+- Local storage persistence
+- GitHub Actions CI integration
+- Vercel deployment support
+- Supabase lead capture integration
+- Lighthouse performance optimization
 # Live Deployment
 https://ai-spend-audit-xi-seven.vercel.app
 
@@ -30,7 +44,7 @@ https://ai-spend-audit-xi-seven.vercel.app
 npm install
 RUN LOCALLY : npm run dev
 it opens : http://localhost:3000
- TEST : npm run test
+* TEST : npm run test
 npm run lint
  DEPLOY : (This project is deployed using Vercel.)
 
