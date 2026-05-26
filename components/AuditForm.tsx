@@ -50,10 +50,9 @@ export default function AuditForm() {
   const [email, setEmail] = useState("");
   const [aiSummary, setAiSummary] = useState("");
   const [loadingSummary, setLoadingSummary] = useState(false);
-  /* eslint-disable react-hooks/set-state-in-effect */
-  "use client";
+
   // Load configuration inputs parameters snapshot ledger profile from localStorage
-  
+
   useEffect(() => {
     const savedTools = localStorage.getItem("credex_audit_tools");
     const savedTeamSize = localStorage.getItem("credex_audit_teamsize");
