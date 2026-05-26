@@ -27,3 +27,6 @@ flowchart TD
     D --> E[OpenAI API]
     C --> F[Email Lead Capture]
     F --> G[Supabase Database]
+    ## Shareable Audit URLs
+
+The current MVP implementation supports lightweight public audit sharing using generated audit routes. Future iterations would include database-backed fully dynamic public audit URLs with persistent audit storage.
