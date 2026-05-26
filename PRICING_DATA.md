@@ -140,3 +140,9 @@ The system is designed to identify obvious inefficiencies and provide directiona
 - API pricing varies based on token usage
 - Recommendations are estimated projections
 - Real-world savings depend on actual usage behavior
+
+## Heuristic Savings Logic
+
+Savings percentages used in the audit engine (such as 15%, 30%, and 45%) are recommendation heuristics created for optimization modeling purposes. These percentages are not official vendor pricing numbers.
+
+Official subscription pricing references are listed above using each vendor’s public pricing page.
